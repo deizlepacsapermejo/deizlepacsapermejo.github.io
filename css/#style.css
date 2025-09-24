@@ -7,7 +7,6 @@
   min-height: 100%;
   object-fit: cover;
   z-index: -1; /* video behind everything */
-  opacity: 0.7;
 }
 
 .button-container {
