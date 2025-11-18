@@ -1,1 +1,135 @@
+/* Custom Styles and Dark Theme Setup */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        :root {
+            --primary: #4f46e5; /* Indigo-600 */
+            --accent: #f97316; /* Orange-500 (Vibrant Accent) */
+            --bg-main: #111827; /* Dark Gray-900 */
+            --text-light: #f9fafb; /* Gray-50 */
+        }
 
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+        .wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Styling for the active navigation link */
+        .nav-link.active {
+            color: var(--accent);
+            border-bottom: 3px solid var(--accent);
+            font-weight: 600;
+        }
+
+        /* Custom scrollbar for better UI/UX */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #242933;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+
+        /* Custom transition for page changes */
+        .content-section {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            min-height: 70vh; /* Ensure content area is visible */
+        }
+        /* Full screen video styling */
+        #video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.5); /* Deepen the filter for better contrast */
+        }
+        /* Overlay content container */
+        .overlay-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 0;
+            /* Use a gradient overlay for visual depth */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.5) 100%);
+            height: 100%; 
+            justify-content: center; 
+        }
+        /* Styling for the horizontal image slider container */
+        #slider {
+            display: flex;
+            gap: 0; /* Gap is applied to the image elements inside the scrolling content */
+            padding: 1rem 0;
+            max-width: 90vw;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            overflow-x: hidden; /* Hide scrollbar for smooth animation */
+        }
+        /* Styling for the content inside the slider */
+        #slider-content {
+            display: flex;
+            gap: 1rem;
+            /* Important for the animation to work */
+            white-space: nowrap; 
+        }
+
+        #slider-content img {
+            min-width: 180px;
+            height: 200px;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.4); /* Pink shadow for theme */
+            transition: opacity 0.5s ease;
+            display: inline-block; /* Ensure they line up for animation */
+            margin-right: 1rem; /* Adjust gap here instead of flex container */
+        }
+        
+        /* Effect when video/slider is paused */
+        .paused-effect #slider-content {
+             animation-play-state: paused !important;
+        }
+        .paused-effect img {
+            opacity: 0.4;
+            filter: grayscale(80%);
+        }
+        
+        /* Custom animation for the image slider (speed can be adjusted here) */
+        .scrolling-slider {
+            /* 40s duration makes it move relatively slowly and smoothly */
+            animation: scroll-left 40s linear infinite; 
+        }
+        /* Keyframes for smooth, infinite scroll */
+        @keyframes scroll-left {
+            /* Moves the content by half its width, as we duplicate the content once */
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); } 
+        }
