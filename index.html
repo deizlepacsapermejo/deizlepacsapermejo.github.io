@@ -1,0 +1,765 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEIZLE | IT Student E-Portfolio</title>
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="css/Finals.css" />
+    <!-- Load Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom Styles and Dark Theme Setup */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        :root {
+            --primary: #4f46e5; /* Indigo-600 */
+            --accent: #f97316; /* Orange-500 (Vibrant Accent) */
+            --bg-main: #081358cc;
+            --text-light: #f9fafb; /* Gray-50 */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+        .wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Styling for the active navigation link */
+        .nav-link.active {
+            color: var(--accent);
+            border-bottom: 3px solid var(--accent);
+            font-weight: 600;
+        }
+
+        /* Custom scrollbar for better UI/UX */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #242933;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280;
+        }
+
+        /* Custom transition for page changes */
+        .content-section {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            min-height: 70vh; /* Ensure content area is visible */
+        }
+        /* Full screen video styling */
+        #video {
+            position:absolute;
+            top: 50%;
+            left: 37%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            object-fit:cover;
+            filter:brightness(1); /* Deepen the filter for better contrast */
+        }
+        /* Overlay content container */
+        .overlay-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            display:contents;
+            flex-direction: column;
+            align-items: center;
+            padding: rem 0;
+            /* Use a gradient overlay for visual depth */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 20%, rgba(0,0,0,0) 80%, rgba(0,0,0,0.5) 100%);
+            height: 100%; 
+            justify-content: center; 
+        }
+        /* Styling for the horizontal image slider container */
+        #slider {
+            display: flex;
+            gap: 0; /* Gap is applied to the image elements inside the scrolling content */
+            padding: 1rem 0;
+            max-width: 70vw;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            overflow-x: hidden; /* Hide scrollbar for smooth animation */
+        }
+        /* Styling for the content inside the slider */
+        #slider-content {
+            display: flex;
+            gap: 1rem;
+            /* Important for the animation to work */
+            white-space: nowrap; 
+        }
+
+        #slider-content img {
+            min-width: 180px;
+            height: 200px;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 10px 25px rgba(255, 105, 180, 0.4); /* Pink shadow for theme */
+            transition: opacity 0.5s ease;
+            display: inline-block; /* Ensure they line up for animation */
+            margin-right: 1rem; /* Adjust gap here instead of flex container */
+        }
+        
+        /* Effect when video/slider is paused */
+        .paused-effect #slider-content {
+             animation-play-state: paused !important;
+        }
+        .paused-effect img {
+            opacity: 0.4;
+            filter: grayscale(80%);
+        }
+        
+        /* Custom animation for the image slider (speed can be adjusted here) */
+        .scrolling-slider {
+            /* 10s duration makes it move relatively slowly and smoothly */
+            animation: scroll-left 40s linear infinite; 
+        }
+        /* Keyframes for smooth, infinite scroll */
+        @keyframes scroll-left {
+            /* Moves the content by half its width, as we duplicate the content once */
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); } 
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Navbar/Header with Dark Theme -->
+    <header class="sticky top-0 z-50 bg-gray-900 shadow-xl border-b border-indigo-900">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo / Name -->
+                <div class="flex-shrink-0 text-2xl font-extrabold">
+                    <span class="text-white">Deizle</span><span class="text-orange-500">.dev</span>
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" data-page="index" class="nav-link text-white hover:text-orange-500 transition duration-150 p-2">Home</a>
+                    <a href="gallery.html" data-page="gallery" class="nav-link text-white hover:text-orange-500 transition duration-150 p-2">Gallery</a>
+                    <a href="portfolio.html" data-page="portfolio" class="nav-link text-white hover:text-orange-500 transition duration-150 p-2">Portfolio</a>
+                    <a href="about.html" data-page="about" class="nav-link text-white hover:text-orange-500 transition duration-150 p-2">About</a>
+                    <a href="contact.html" data-page="contact" class="nav-link text-white hover:text-orange-500 transition duration-150 p-2">Contact</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-300 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay (Dark) -->
+        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 z-40 bg-gray-900 bg-opacity-75 transition-opacity duration-300 ease-in-out">
+            <div class="fixed right-0 top-0 w-64 h-full bg-gray-800 shadow-xl p-6 transform translate-x-full transition-transform duration-300 ease-in-out" id="mobile-menu-content">
+                <div class="flex justify-between items-center mb-8">
+                    <span class="text-xl font-bold text-white">Menu</span>
+                    <button id="close-mobile-menu" class="text-gray-400 hover:text-white">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <nav class="flex flex-col space-y-4 text-lg">
+                    <a href="index.html" data-page="index" class="mobile-nav-link p-3 text-gray-400 hover:bg-indigo-700 rounded-lg">Home</a>
+                    <a href="gallery.html" data-page="gallery" class="mobile-nav-link p-3 text-gray-400 hover:bg-indigo-700 rounded-lg">Gallery</a>
+                    <a href="portfolio.html" data-page="portfolio" class="mobile-nav-link p-3 text-gray-400 hover:bg-indigo-700 rounded-lg">Portfolio</a>
+                    <a href="about.html" data-page="about" class="mobile-nav-link p-3 text-gray-400 hover:bg-indigo-700 rounded-lg">About</a>
+                    <a href="contact.html" data-page="contact" class="mobile-nav-link p-3 text-gray-400 hover:bg-indigo-700 rounded-lg">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+   <!-- Main Content Area -->
+    <main class="flex-grow container mx-auto p-4 sm:p-8 lg:p-12">
+        
+        <!-- HOME Section - main page of your entire website -->
+        <section id="page-home" class="content-section max-w-5xl mx-auto py-12">
+            <div class="flex flex-col lg:flex-row items-center justify-center space-y-12 lg:space-y-0 lg:space-x-16 bg-gray-800 p-10 rounded-xl shadow-2xl border border-gray-700">
+                
+                <!-- Professional Image (Placeholder) -->
+                <div class="flex-shrink-0">
+                    <img src="images/img1.png" 
+                         alt="Professional Profile Picture" 
+                         class="w-64 h-64 object-cover rounded-full ring-4 ring-orange-500 ring-opacity-50 shadow-xl transition duration-500 hover:scale-105">
+                </div>
+
+                <!-- Introduction (How you describe yourself as an IT person) -->
+                <div class="lg:max-w-xl text-center lg:text-left">
+                    <span class="text-lg font-semibold text-orange-500 uppercase tracking-widest">Information Technology Student | Web Developer</span>
+                    <h1 class="mt-4 text-4xl sm:text-6xl font-extrabold text-white leading-tight">
+                        Hello, I'm <span class="text-indigo-400">Deizle P.</span>
+                    </h1>
+                    <p class="mt-6 text-xl text-gray-300 leading-relaxed">
+                        I am a proactive IT specialist, passionate about building robust and efficient digital systems. My focus is on full-stack development, leveraging modern JavaScript frameworks and scalable database design to create seamless, high-performance web applications. I turn complex logic into clean code.
+                    </p>
+                    <div class="mt-8 flex justify-center lg:justify-start space-x-4">
+                        <button onclick="navigateTo('portfolio')" class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold shadow-lg hover:bg-indigo-700 transition duration-300 transform hover:translate-y-[-2px] ring-2 ring-indigo-500">
+                            Explore Projects
+                        </button>
+                        <button onclick="navigateTo('about')" class="bg-gray-700 text-orange-500 border border-orange-500 px-8 py-3 rounded-lg font-bold shadow-lg hover:bg-gray-600 transition duration-300">
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO Section - link to this activity (Projects & Work Experiences) -->
+        <section id="page-portfolio" class="content-section hidden">
+    <h2 class="text-4xl font-bold text-white mb-10 border-b-4 border-orange-500 pb-2">Portfolio Showcase</h2>
+    
+    <h3 class="text-3xl font-semibold text-indigo-400 mb-6">Featured Projects</h3>
+    <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        </div>
+
+    <h3 class="text-3xl font-semibold text-indigo-400 mt-16 mb-6">Work Experiences</h3>
+    <div class="space-y-8">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-xl border-l-4 border-orange-500 transition duration-300 hover:bg-gray-700">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xl font-bold text-white">Junior Web Checker Intern</p>
+                    <p class="text-md text-gray-400">ADTEMPCO</p>
+                </div>
+                <span class="text-sm font-medium text-gray-300 bg-gray-700 px-3 py-1 rounded-full">Sep 28 – Present</span>
+            </div>
+            <ul class="list-disc list-inside mt-4 text-gray-300 space-y-1">
+                <li>Cash Receipt Checker</li>
+                <li>Individual Monthly Report Organizer</li>
+                <li>loan Papers Organizer</li>
+                <li>File Organizer</li>
+            </ul>
+        </div>
+        
+        <div class="bg-gray-800 p-6 rounded-lg shadow-xl border-l-4 border-orange-500 transition duration-300 hover:bg-gray-700">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xl font-bold text-white">Student</p>
+                    <p class="text-md text-gray-400">DATA CENTER COLLEGE OF THE PHILIPPINES</p>
+                </div>
+                <span class="text-sm font-medium text-gray-300 bg-gray-700 px-3 py-1 rounded-full">2021 - Present</span>
+            </div>
+            <ul class="list-disc list-inside mt-4 text-gray-300 space-y-1">
+                <li>Bachelor of Science in Information Technology </li>
+            </ul>
+        </div>
+
+        <div class="bg-orange-600/10 border-2 border-orange-500 p-8 rounded-xl shadow-xl text-center">
+            <p class="text-2xl font-bold text-white mb-4 flex items-center justify-center">
+                <i data-lucide="file-text" class="w-7 h-7 mr-3 text-orange-500"></i>
+                My E-Portfolio
+            </p>
+            <a href= "https://github.com/deizlepacsapermejo/deizlepacsapermejo.github.io" target="_blank" class="inline-flex items-center text-orange-500 font-semibold hover:text-orange-600 transition duration-150">
+                <i data-lucide="github" class="w-4 h-4 mr-1"></i>
+                View Code/Project
+            </a>
+        </div>
+    </div>
+</section>
+
+        <!-- ABOUT Section - contains the description of your website and its purpose -->
+        <section id="page-about" class="content-section hidden max-w-4xl mx-auto">
+            <h2 class="text-4xl font-bold text-white mb-10 border-b-4 border-orange-500 pb-2">About Deizle & This Website</h2>
+
+            <!-- Personal and Professional Information -->
+            <div class="bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700 mb-12">
+                <h3 class="text-3xl font-semibold text-indigo-400 mb-4">Personal & Educational Background</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg text-gray-300">
+                    <div>
+                        <p class="font-bold text-white mb-2">Details:</p>
+                        <p><i data-lucide="map-pin" class="w-4 h-4 inline-block mr-2 text-orange-500"></i>Location: Bangued, Philippines</p>
+                        <p><i data-lucide="mail" class="w-4 h-4 inline-block mr-2 text-orange-500"></i>Email: <span class="text-indigo-400">deizlepacsapermejo@gmail.com</span></p>
+                        <p><i data-lucide="code" class="w-4 h-4 inline-block mr-2 text-orange-500"></i>Focus: Full-Stack Development, Data Structures</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-white mb-2">Education:</p>
+                        <p><i data-lucide="graduation-cap" class="w-4 h-4 inline-block mr-2 text-orange-500"></i>B.S. Information Technology</p>
+                        <p class="text-sm italic text-gray-400">Data Center Collage of the Philippines (2021 - Present)</p>
+                        <p class="text-sm text-gray-400">Key Areas: Advanced Algorithms, Web Systems, Database Management.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Website Purpose -->
+            <div class="bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700 mb-12">
+                <h3 class="text-3xl font-semibold text-indigo-400 mb-4">Website Purpose</h3>
+                <p class="text-lg text-gray-300">
+                    My e-portfolio serves as a living, working testament to the core purpose of my journey as an Information Technology student: to build and deploy solutions that solve tangible, real-world problems. It is a space dedicated to bridging the gap between theoretical knowledge and practical application, showcasing my growth as a developer and a digital architect.
+                    Here, you will find projects that demonstrate proficiency across the full stack of web engineering—from designing engaging user interfaces (UI) and ensuring a seamless user experience (UX), to developing robust back-end APIs and managing scalable data infrastructure.
+                    Ultimately, this platform is more than just a portfolio. It is a commitment to continuous learning, a demonstration of technical expertise, and an open invitation to collaborate on the next generation of accessible and impactful digital systems.
+                </p>
+            </div>
+
+            <!-- Resume Link (Required PDF link) -->
+            <div class="bg-orange-600/10 border-2 border-orange-500 p-8 rounded-xl shadow-xl text-center">
+                <p class="text-2xl font-bold text-white mb-4 flex items-center justify-center">
+                    <i data-lucide="file-text" class="w-7 h-7 mr-3 text-orange-500"></i>
+                    Download My Full Resume (PDF)
+                </p>
+                <a href= "https://deizlepacapermejo.github.io/Deizle Pacsa Permejo.pdf" target="_blank" download="Deizle Pacsa Permejo.pdf" class="inline-flex items-center bg-orange-500 text-gray-900 px-8 py-3 rounded-lg font-extrabold text-lg shadow-xl hover:bg-orange-600 transition duration-300 transform hover:scale-[1.02]">
+                    <i data-lucide="download" class="w-5 h-5 mr-3"></i>
+                    Get Resume
+                </a>
+            </div>
+        </section>
+        
+        <!-- GALLERY Section - personal (solo) images and videos -->
+        <section id="page-gallery" class="content-section hidden">
+            <h2 class="text-4xl font-bold text-white mb-10 border-b-4 border-orange-500 border-slider-500 pb-2">Personal Gallery</h2>
+
+             <!-- Video & Overlay Section -->
+             <div class="wrapper">
+              <!-- Background Video (using your path: vid.mp4) -->
+              <video id="video" autoplay muted loop playsinline>
+              <source src="vid.mp4" type="video/mp4" />
+                 Your browser does not support the video tag.
+                </video>
+
+              <!-- Overlay Content -->
+             <div class="overlay-content">
+            
+             <!-- Custom Title/Header -->
+             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-8 p-4 rounded-xl 
+                       shadow-2xl tracking-widest text-shadow-lg" 
+                style="text-shadow: 0 0 10px rgba(255, 105, 180, 0.9); background-color: rgba(0, 0, 0, 0.4);">
+                MY CHERRY BLOSSOM GALLERY
+                 </h1>
+
+                <!-- Sliding Overlay Image Gallery (Horizontally Scrolling and Looping) -->
+                 <div id="slider">
+                 <div id="slider-content" class="scrolling-slider">
+                    <!-- Images are duplicated by JavaScript below for seamless loop -->
+                    <!-- Initial Images -->
+                    <img src="images/img2.jpg" class="rounded-lg" alt="Gallery Image 2"/>
+                    <img src="images/img3.jpg" class="rounded-lg" alt="Gallery Image 3"/>
+                    <img src="images/img4.jpg" class="rounded-lg" alt="Gallery Image 4"/>
+                    <img src="images/img5.jpg" class="rounded-lg" alt="Gallery Image 5"/>
+                    <img src="images/img6.jpg" class="rounded-lg" alt="Gallery Image 6"/>
+                    <img src="images/img7.jpg" class="rounded-lg" alt="Gallery Image 7"/>
+                    <img src="images/img8.webp" class="rounded-lg" alt="Gallery Image 8"/>
+                    <img src="images/img9.webp" class="rounded-lg" alt="Gallery Image 9"/>
+                    <img src="images/img10.jpg" class="rounded-lg" alt="Gallery Image 10"/>
+                    <img src="images/img11.jpg" class="rounded-lg" alt="Gallery Image 11"/>
+                    
+                    <!-- Duplicated Images (Added by JS to guarantee the loop) -->
+                    <!-- This second set of images is what enables the 'infinite' scroll effect -->
+                </div>
+            </div>
+
+            <!-- Controls and Home Button -->
+            <div class="mt-12 flex flex-col items-center space-y-4">
+                <button id="toggleBtn" 
+                        class="px-8 py-3 bg-pink-500 text-white font-semibold text-lg rounded-full 
+                               shadow-xl hover:bg-pink-600 transition duration-300 transform hover:scale-105 
+                               focus:outline-none focus:ring-4 focus:ring-pink-300 active:bg-pink-700">
+                    Pause Video
+                </button>
+                
+                <!-- HOME button styled using a softer purple tone -->
+                <a href="index.html">
+                    <button type="button" aria-label="Go to Home Dashboard"
+                        class="px-6 py-2 bg-purple-500 text-white font-medium rounded-lg 
+                               shadow-md hover:bg-purple-600 transition duration-200 transform hover:scale-105">
+                        HOME
+                    </button>
+                </a>
+            </div>
+            
+        </div>
+    </div>
+        </section>
+
+        <!-- CONTACT Section - simple contact form -->
+<section id="page-contact" class="content-section hidden max-w-xl mx-auto">
+    <h2 class="text-4xl font-bold text-white mb-10 border-b-4 border-orange-500 pb-2">Contact Me</h2>
+
+    <!-- Follow Me Section (Now the first block, uses the same dark gray background) -->
+    <div class="bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700 mb-12">
+        <h3 class="text-3xl font-bold text-white mb-2 text-center">Vibe me in!</h3>
+        <p class="text-gray-400 mb-8 text-center">Follow me on social media</p>
+        
+        <!-- Social Buttons Container -->
+        <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+
+            <!-- GitHub Button -->
+            <a href="https://github.com/deizlepacsapermej" target="_blank" class="w-full sm:w-auto flex items-center justify-center py-3 px-8 rounded-full text-lg font-semibold text-gray-900 transition duration-300 transform hover:scale-105 shadow-md bg-gradient-to-r from-green-300 to-lime-300">
+                <i data-lucide="github" class="w-5 h-5 mr-2 text-gray-900"></i>
+                GitHub
+            </a>
+
+            <!-- Facebook Button -->
+            <a href="https://www.facebook.com/deizle.pacsapermejo" target="_blank" class="w-full sm:w-auto flex items-center justify-center py-3 px-8 rounded-full text-lg font-semibold text-gray-900 transition duration-300 transform hover:scale-105 shadow-md bg-gradient-to-r from-green-300 to-lime-300">
+                <i data-lucide="facebook" class="w-5 h-5 mr-2 text-blue-600"></i>
+                Facebook
+            </a>
+
+            <!-- Instagram Button -->
+            <a href="https://www.instagram.com/missy.zelle/m Profile" target="_blank" class="w-full sm:w-auto flex items-center justify-center py-3 px-8 rounded-full text-lg font-semibold text-gray-900 transition duration-300 transform hover:scale-105 shadow-md bg-gradient-to-r from-green-300 to-lime-300">
+                <i data-lucide="instagram" class="w-5 h-5 mr-2 text-pink-600"></i>
+                Instagram
+            </a>
+        </div>
+    </div>
+
+    <!-- Contact Form Block - Now the second block, uses consistent background -->
+    <div class="bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-700">
+        <!-- New Introduction Added Here -->
+        <h3 class="text-2xl font-semibold text-white mb-2 text-center">Let's Connect!</h3>
+        <p class="text-gray-400 mb-6 text-center">Have a project, job offer, or question? Send a message and I'll get back to you as soon as possible.</p>
+        
+        <form id="contact-form" class="space-y-6">
+            <div>
+                <label for="name" class="block text-lg font-medium text-gray-300 mb-1">Full Name</label>
+                <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-lg border-gray-600 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-3 bg-gray-700 text-white">
+            </div>
+            <div>
+                <label for="email" class="block text-lg font-medium text-gray-300 mb-1">Email Address</label>
+                <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-lg border-gray-600 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-3 bg-gray-700 text-white">
+            </div>
+            <div>
+                <label for="message" class="block text-lg font-medium text-gray-300 mb-1">Message</label>
+                <textarea id="message" name="message" rows="4" required class="mt-1 block w-full rounded-lg border-gray-600 shadow-sm focus:border-orange-500 focus:ring-orange-500 p-3 bg-gray-700 text-white"></textarea>
+            </div>
+            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-lg text-xl font-bold text-gray-900 bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-4 focus:ring-offset-2 focus:ring-orange-500 focus:ring-offset-gray-900 transition duration-150">
+                    Send Message
+            </button>
+            <div id="form-message" class="text-center mt-4 text-orange-400 font-semibold hidden"></div>
+        </form>
+    </div>
+</section>
+
+    </main>
+
+    <!-- FOOTER (Required Content) -->
+    <footer class="bg-gray-900 border-t border-indigo-900 w-full">
+        <div class="container mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between">
+            
+            <!-- Email & Copyright -->
+            <div class="text-center sm:text-left mb-4 sm:mb-0 text-gray-400">
+                <p class="mb-2 text-base">
+                    <i data-lucide="mail" class="w-4 h-4 inline-block mr-2 text-orange-500"></i>
+                    Email: <a href="mailto:deizlepacsapermejo@gmail.com" class="hover:text-orange-500 transition duration-150"> deizlepacsapermejo@gmail.com</a>
+                </p>
+                <p class="text-sm">
+                    &copy; 2025 Deizle P. All Rights Reserved.
+                </p>
+            </div>
+
+            <!-- Social Media Links (using icons, including GitHub) -->
+            <div class="flex space-x-5">
+                <a href="https://github.com/deizlepacsapermejo" target="_blank" aria-label="GitHub Profile" class="text-gray-400 hover:text-orange-500 transition duration-150 transform hover:scale-110">
+                    <i data-lucide="github" class="w-7 h-7"></i>
+                </a>
+                <a href="https://www.facebook.com/deizle.pacsapermejo" target="_blank" aria-label="facebook Profile" class="text-gray-400 hover:text-orange-500 transition duration-150 transform hover:scale-110">
+                    <i data-lucide="facebook" class="w-7 h-7"></i>
+                </a>
+                <a href="https://www.instagram.com/missy.zelle/m Profile" target="_blank" aria-label="Instagram Profile" class="text-gray-400 hover:text-orange-500 transition duration-150 transform hover:scale-110">
+                    <i data-lucide="Instagram" class="w-7 h-7"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Dynamic Content and Navigation -->
+    <script>
+        // --- DATA SECTION ---
+        // Mock data for project cards
+        const PROJECTS_DATA = [
+            {
+                id: 1,
+                title: "Zest&Divine",
+                description: "For a shop specializing in high-quality, delicious delicacies,it captures the essence of the name Zavier Deive while instantly communicating bright flavor (Zest) and premium quality (Divine).",
+                languages: ["HTML", "CSS", "PNG", "JS"],
+                link: "https://deizlepacsapermejo.github.io/Zest-Divine.github.io/",
+                screenshot: "https://deizlepacsapermejo.github.io/Screenshot 1.png",
+            },
+            {
+                id: 2,
+                title: "Zavier's 1st Birthday Party!",
+                description: "This is a single-file, modern, and fully responsive digital invitation designed to be shared easily via a link",
+                languages: ["HTML", "CSS", "JS"],
+                link: "https://deizlepacsapermejo.github.io/zaviers-first-birthday.github.io/",
+                screenshot: "https://deizlepacsapermejo.github.io/Screenshot 2.png",
+            },
+            {
+                id: 3,
+                title: "2025 Modern Calendar",
+                description: "A charming Christmas calendar with a lovely light red background and a subtle, whimsical snowflake pattern, making it feel extra festive",
+                languages: ["CSS", "HTML", "JS"],
+                link: "https://deizlepacsapermejo.github.io/Christmas_Calendar_2025.github.io/",
+                screenshot: "https://deizlepacsapermejo.github.io/Screenshot 3.png",
+            },
+        ];
+
+        // --- UTILITY FUNCTIONS ---
+
+        // Function to ensure all Lucide icons render after page load/content injection
+        function initializeIcons() {
+            lucide.createIcons();
+        }
+
+        // --- NAVIGATION LOGIC ---
+
+        const pageSections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        
+        // Function to switch visible page/section
+        function navigateTo(pageId) {
+            let targetPage = pageId;
+
+            // 1. Hide all sections and remove active class from all links
+            pageSections.forEach(section => {
+                section.classList.add('hidden');
+                section.style.opacity = 0;
+            });
+            
+            navLinks.forEach(link => link.classList.remove('active'));
+            mobileNavLinks.forEach(link => link.classList.remove('active'));
+
+            // 2. Determine target page from URL hash or direct call
+            if (pageId.startsWith('#')) {
+                targetPage = pageId.substring(1);
+            }
+            
+            const targetSection = document.getElementById(`page-${targetPage}`);
+            
+            if (targetSection) {
+                // 3. Show target section with a fade-in effect
+                targetSection.classList.remove('hidden');
+                setTimeout(() => {
+                    targetSection.style.opacity = 1;
+                }, 10); // Small delay for CSS transition to apply
+
+                // 4. Set active class on corresponding link
+                const activeLinks = document.querySelectorAll(`[data-page="${targetPage}"]`);
+                activeLinks.forEach(link => link.classList.add('active'));
+
+                // 5. Update URL hash
+                history.pushState(null, null, `#${targetPage}`);
+                
+                // 6. Close mobile menu if open
+                if (document.getElementById('mobile-menu').classList.contains('opacity-100')) {
+                    toggleMobileMenu(false);
+                }
+            } else {
+                // Default to home if page is not found
+                console.error(`Page section not found: ${targetPage}. Defaulting to home.`);
+                navigateTo('home');
+            }
+            // Scroll to top when navigating to a new page
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Handle navigation clicks (desktop/mobile)
+        [...navLinks, ...mobileNavLinks].forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = e.currentTarget.dataset.page;
+                navigateTo(pageId);
+            });
+        });
+
+        // Handle initial load based on URL hash
+        window.addEventListener('load', () => {
+            const hash = window.location.hash || '#home';
+            navigateTo(hash);
+            initializeIcons(); // Initialize icons after initial content is set
+        });
+
+        window.addEventListener('hashchange', () => {
+            navigateTo(window.location.hash);
+        });
+        
+        // --- MOBILE MENU LOGIC ---
+        
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuContent = document.getElementById('mobile-menu-content');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+
+        function toggleMobileMenu(isOpen) {
+            if (isOpen === undefined) {
+                isOpen = mobileMenu.classList.contains('hidden');
+            }
+
+            if (isOpen) {
+                mobileMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMenu.classList.add('opacity-100');
+                    mobileMenuContent.classList.remove('translate-x-full');
+                }, 10);
+            } else {
+                mobileMenu.classList.remove('opacity-100');
+                mobileMenuContent.classList.add('translate-x-full');
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300); // Wait for transition to finish
+            }
+        }
+
+        mobileMenuButton.addEventListener('click', () => toggleMobileMenu(true));
+        closeMobileMenuButton.addEventListener('click', () => toggleMobileMenu(false));
+        // Close menu when clicking outside the content
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) {
+                toggleMobileMenu(false);
+            }
+        });
+
+        // --- CONTENT RENDERING (Projects) ---
+
+        function renderProjects() {
+            const container = document.getElementById('projects-container');
+            if (!container) return;
+
+            container.innerHTML = PROJECTS_DATA.map(project => `
+                <div class="bg-gray-800 rounded-xl shadow-xl overflow-hidden transition duration-300 hover:shadow-2xl transform hover:scale-[1.02] border border-indigo-900">
+                    <!-- Project Screenshot -->
+                    <img src="${project.screenshot}" alt="Screenshot of ${project.title}" class="w-full h-48 object-cover">
+                    <div class="p-5">
+                        <h4 class="text-xl font-bold text-white mb-2">${project.title}</h4>
+                        <p class="text-gray-400 mb-4">${project.description}</p>
+                        
+                        <!-- Languages Used -->
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${project.languages.map(lang => `
+                                <span class="bg-indigo-900 text-indigo-300 text-xs font-medium px-3 py-1 rounded-full">${lang}</span>
+                            `).join('')}
+                        </div>
+
+                        <!-- Link to Project/GitHub -->
+                        <a href="${project.link}" target="_blank" class="inline-flex items-center text-orange-500 font-semibold hover:text-orange-600 transition duration-150">
+                            <i data-lucide="github" class="w-4 h-4 mr-1"></i>
+                            View Code/Project
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+            
+            initializeIcons(); // Re-initialize icons after injecting new HTML
+        }
+        
+        // --- FORM HANDLING (Contact) ---
+
+        const contactForm = document.getElementById('contact-form');
+        const formMessage = document.getElementById('form-message');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // In a real app, this is where you would send data to a backend service (e.g., Firebase, Formspree)
+
+                formMessage.textContent = 'Thank you for your message! Deizle will respond shortly.';
+                formMessage.classList.remove('hidden');
+                
+                contactForm.reset();
+                
+                // Hide message after a few seconds
+                setTimeout(() => {
+                    formMessage.classList.add('hidden');
+                }, 5000);
+            });
+        }
+
+        const video = document.getElementById('video');
+        const sliderContainer = document.getElementById('slider');
+        const sliderContent = document.getElementById('slider-content');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const imagePaths = [
+            "images/img2.jpg", "images/img3.jpg", "images/img4.jpg", "images/img5.jpg", 
+            "images/img6.jpg", "images/img7.jpg", "images/img8.webp", "images/img9.webp", 
+            "images/img10.jpg", "images/img11.jpg"
+        ];
+
+        let isPaused = false;
+
+        // Function to clone images for the infinite scroll effect
+        function setupInfiniteScroll() {
+            // Clone the initial set of images and append them to make the scroll seamless
+            const clonedContent = sliderContent.innerHTML;
+            sliderContent.innerHTML += clonedContent;
+        }
+        
+        // --- Initialization and Event Listeners ---
+
+        // 1. Setup the infinite scroll loop
+        setupInfiniteScroll();
+
+        // 2. Initial video check (attempt to play)
+        window.addEventListener('load', () => {
+            video.play().catch(error => {
+                console.log("Autoplay prevented:", error);
+                isPaused = true;
+                toggleBtn.textContent = 'Play Video (Autoplay Blocked)';
+                toggleBtn.classList.remove('bg-pink-500');
+                toggleBtn.classList.add('bg-red-500');
+                sliderContainer.classList.add('paused-effect'); // Pause slider animation too
+            });
+        });
+
+        // 3. Toggle Button Handler
+        toggleBtn.addEventListener('click', () => {
+            isPaused = !isPaused;
+
+            if (isPaused) {
+                video.pause();
+                sliderContainer.classList.add('paused-effect');
+                toggleBtn.textContent = 'Play Video';
+                toggleBtn.classList.remove('bg-pink-500', 'hover:bg-pink-600');
+                toggleBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+            } else {
+                video.play();
+                sliderContainer.classList.remove('paused-effect');
+                toggleBtn.textContent = 'Pause Video';
+                toggleBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                toggleBtn.classList.add('bg-pink-500', 'hover:bg-pink-600');
+            }
+        });
+
+        // 4. Loop functionality for video (just in case 'loop' attribute fails)
+        video.addEventListener('ended', () => {
+            video.currentTime = 0;
+            if (!isPaused) {
+                video.play();
+            }
+        });
+
+        // Initialize projects rendering on load
+        window.addEventListener('load', renderProjects);
+
+    </script>
+</body>
+</html>
